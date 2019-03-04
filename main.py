@@ -45,7 +45,24 @@ if __name__ == '__main__':
     g_optimizer = optim.RMSprop(generator.parameters(), lr=0.0001)
     d_optimizer = optim.RMSprop(discriminator.parameters(), lr=0.0001)
 
+    #Resume Training
+    load_epoch = 0
+    files = sorted(os.listdir('epochs/'))
+    if len(files)>1:
+        ep = files[-1]
+        load_epoch = ep.split('.')[0].split('-')[1] 
+        g_path = os.path.join('epochs', 'generator-{}.pkl'.format(load_epoch))
+        d_path = os.path.join('epochs', 'discriminator-{}.pkl'.format(load_epoch))
+        gen = torch.load(g_path)
+        dis = torch.load(d_path)
+        generator.load_state_dict(gen)
+        discriminator.load_state_dict(dis)
+        print("Loaded files for generator and discriminator ")
+
     for epoch in range(NUM_EPOCHS):
+        if epoch==0:
+            if load_epoch>0:
+                epoch = load_epoch+1
         train_bar = tqdm(train_data_loader)
         for train_batch, train_clean, train_noisy in train_bar:
 
