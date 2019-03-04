@@ -15,7 +15,7 @@ from utils import AudioDataset, emphasis
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Train Audio Enhancement')
-    parser.add_argument('--batch_size', default=50, type=int, help='train batch size')
+    parser.add_argument('--batch_size', default=170, type=int, help='train batch size')
     parser.add_argument('--num_epochs', default=86, type=int, help='train epochs number')
 
     opt = parser.parse_args()
