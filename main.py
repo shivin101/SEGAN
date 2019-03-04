@@ -62,7 +62,7 @@ if __name__ == '__main__':
     for epoch in range(NUM_EPOCHS):
         if epoch==0:
             if int(load_epoch)>0:
-                epoch = load_epoch+1
+                epoch = load_epoch
         train_bar = tqdm(train_data_loader)
         for train_batch, train_clean, train_noisy in train_bar:
 
