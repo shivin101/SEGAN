@@ -48,9 +48,11 @@ if __name__ == '__main__':
     #Resume Training
     load_epoch = 0
     files = sorted(os.listdir('epochs/'))
+    eps = [int(ep.split('.')[0].split('-')[1] for ep in files[1:])]
+    eps = sorted(eps)
     if len(files)>1:
         ep = files[-1]
-        load_epoch = int(ep.split('.')[0].split('-')[1]) 
+        load_epoch = eps[-1] 
         g_path = os.path.join('epochs', 'generator-{}.pkl'.format(load_epoch))
         d_path = os.path.join('epochs', 'discriminator-{}.pkl'.format(load_epoch))
         gen = torch.load(g_path)
