@@ -56,7 +56,8 @@ if __name__ == '__main__':
     files = sorted(os.listdir('epochs/'))
     eps = [int(ep.split('.')[0].split('-')[1]) for ep in files[1:]]
     eps = sorted(eps)
-    if len(files)>1:
+    flag=0
+    if len(files)>1 and flag:
         ep = files[-1]
         load_epoch = eps[-1] 
         g_path = os.path.join('epochs', 'generator-{}.pkl'.format(load_epoch))
