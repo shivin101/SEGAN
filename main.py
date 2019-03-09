@@ -16,7 +16,7 @@ import pickle as pkl
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Train Audio Enhancement')
-    parser.add_argument('--batch_size', default=170, type=int, help='train batch size')
+    parser.add_argument('--batch_size', default=17, type=int, help='train batch size')
     parser.add_argument('--num_epochs', default=86, type=int, help='train epochs number')
 
     opt = parser.parse_args()
@@ -56,7 +56,7 @@ if __name__ == '__main__':
     files = sorted(os.listdir('epochs/'))
     eps = [int(ep.split('.')[0].split('-')[1]) for ep in files[1:]]
     eps = sorted(eps)
-    if len(files)>1:
+    if len(files)>1 and 0:
         ep = files[-1]
         load_epoch = eps[-1] 
         g_path = os.path.join('epochs', 'generator-{}.pkl'.format(load_epoch))
