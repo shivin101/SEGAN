@@ -162,6 +162,10 @@ class Generator(nn.Module):
         self.enc11 = nn.Conv1d(512, 1024, 32, 2, 15)  # [B x 1024 x 8]
         self.enc11_nl = nn.PReLU()
 
+        # attention layer
+        self.attention_l1 = Self_Attn(1024, 'relu')
+        self.attention_l2 = Self_Attn(1024, 'relu')
+
         # decoder generates an enhanced signal
         # each decoder output are concatenated with homologous encoder output,
         # so the feature map sizes are doubled
@@ -221,6 +225,10 @@ class Generator(nn.Module):
         e11 = self.enc11(self.enc10_nl(e10))
         # c = compressed feature, the 'thought vector'
         c = self.enc11_nl(e11)
+
+        # apply attention layer
+        c, _ = self.attention_l1(c)
+        c, _ = self.attention_l2(c)
 
         # concatenate the thought vector with latent variable
         encoded = torch.cat((c, z), dim=1)
@@ -292,6 +300,11 @@ class Discriminator(nn.Module):
         self.vbn10 = VirtualBatchNorm1d(1024)
         self.lrelu10 = nn.LeakyReLU(negative_slope)
         self.conv11 = nn.Conv1d(1024, 2048, 31, 2, 15)  # [B x 2048 x 8]
+
+        # attention layer
+        self.attention_l1 = Self_Attn(2048, 'relu')
+        self.attention_l2 = Self_Attn(2048, 'relu')
+
         self.vbn11 = VirtualBatchNorm1d(2048)
         self.lrelu11 = nn.LeakyReLU(negative_slope)
         # 1x1 size kernel for dimension and parameter reduction
@@ -392,6 +405,11 @@ class Discriminator(nn.Module):
         x, _, _ = self.vbn10(x, mean10, meansq10)
         x = self.lrelu10(x)
         x = self.conv11(x)
+
+        # apply attention layer
+        x, _ = self.attention_l1(x)
+        x, _ = self.attention_l2(x)
+
         x, _, _ = self.vbn11(x, mean11, meansq11)
         x = self.lrelu11(x)
         x = self.conv_final(x)
